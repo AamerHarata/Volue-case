@@ -3,5 +3,8 @@
 public class Position
 {
     public string Id { get; set; }
-    public int Quantity { get; set; }
+    public decimal Quantity { get; set; }
+    
+    public Series Series { get; set; }
+    public string SeriesId { get; set; }
 }

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Volue_case.Models.Entities;
 
 namespace Volue_case.Models;
 
@@ -12,7 +13,7 @@ public class Bid
     public BidStatus Status { get; set; }
     public string Country { get; set; }
     
-    public List<BidSeries> Series { get; set; }
+    public List<Series> Series { get; set; }
     public List<UpdateHistory> UpdateHistory { get; set; }
 }
 

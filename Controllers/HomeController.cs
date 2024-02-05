@@ -1,3 +1,6 @@
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Volue_case.Models;
 
@@ -7,11 +10,13 @@ public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
     private readonly IHttpClientFactory _clientFactory;
+    private readonly IMapper _mapper;
 
-    public HomeController(ILogger<HomeController> logger, IHttpClientFactory clientFactory)
+    public HomeController(ILogger<HomeController> logger, IHttpClientFactory clientFactory, IMapper mapper)
     {
         _logger = logger;
         _clientFactory = clientFactory;
+        _mapper = mapper;
     }
 
     public async Task<IActionResult> Index()
@@ -27,8 +32,21 @@ public class HomeController : Controller
 
         var response = await client.SendAsync(request);
         var responseContent = await response.Content.ReadAsStringAsync();
+        // var responseContent = await response.Content.ReadFromJsonAsync<Bid>();
 
-        return Ok(responseContent);
+        var options = new JsonSerializerOptions
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            Converters = { new JsonStringEnumConverter(JsonNamingPolicy.CamelCase) },
+            PropertyNameCaseInsensitive = true,
+            NumberHandling = JsonNumberHandling.AllowReadingFromString
+        };
+
+        // var x = _mapper.Map<Bid>(responseContent);
+
+        var x = JsonSerializer.Deserialize<Bid>(responseContent, options);
+
+        return View(x);
     }
 
     public IActionResult Privacy()

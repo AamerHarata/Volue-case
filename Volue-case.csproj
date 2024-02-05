@@ -8,10 +8,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Models\AutoMapper\Profiles\" />
+    <Folder Include="Data\Migrations\" />
     <Folder Include="Models\ViewModels\" />
     <Folder Include="Repositories\" />
-    <Folder Include="Services\" />
   </ItemGroup>
 
   <ItemGroup>

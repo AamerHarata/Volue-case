@@ -9,6 +9,8 @@ ConfigureDb.Configure(builder.Services, builder.Configuration.GetConnectionStrin
 builder.Services.AddHttpClient();
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

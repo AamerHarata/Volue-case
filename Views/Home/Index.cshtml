@@ -1,5 +1,89 @@
-﻿@{
+﻿@using Volue_case.Services
+@model Bid
+@{
     ViewData["Title"] = "Home Page";
+  var i = 1;
 }
 
-<div>Here is a list of fetched data</div>
+<div class="container text-center">
+    <div class="card p-5 w-75 m-auto">
+      <div>Customer: @Model.Series.Select(x=> x.CustomerId).FirstOrDefault()</div>
+      <div>@Model.Day.ToDateFormat()</div>
+      <div>@Model.Day.ToTimeFormat()</div>
+    </div>
+</div>
+
+<hr/>
+<div class="accordion" id="series">
+  @foreach (var series in Model.Series)
+  {
+    var show = i == 1 ? "show" : "";
+    var j = 1;
+
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading-@i">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-@i" aria-expanded="true" aria-controls="collapse-@i">
+          Series #@i
+        </button>
+      </h2>
+      <div id="collapse-@i" class="accordion-collapse collapse @show" aria-labelledby="heading-@i" data-bs-parent="#series">
+        <div class="accordion-body">
+          <strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+        </div>
+        
+        @* Positions list*@
+        <div class="accordion w-75 m-auto p-5" id="positions">
+          @foreach (var position in series.Positions)
+          {
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="heading-pos-@j">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-pos-@j" aria-expanded="false" aria-controls="collapse-pos-@j">
+                  Position #@j
+                </button>
+              </h2>
+              <div id="collapse-pos-@j" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#positions">
+                <div class="accordion-body">
+                  <ul>
+                    <li>Quantity: @position.Quantity</li>
+                  </ul>
+                  
+                </div>
+              </div>
+            </div>
+
+            j++;
+          }
+        </div>
+        
+      </div>
+    </div>
+
+    i++;
+
+  }
+  
+  @* <div class="accordion-item"> *@
+  @*   <h2 class="accordion-header" id="headingTwo"> *@
+  @*     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo"> *@
+  @*       Accordion Item #2 *@
+  @*     </button> *@
+  @*   </h2> *@
+  @*   <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample"> *@
+  @*     <div class="accordion-body"> *@
+  @*       <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow. *@
+  @*     </div> *@
+  @*   </div> *@
+  @* </div> *@
+  @* <div class="accordion-item"> *@
+  @*   <h2 class="accordion-header" id="headingThree"> *@
+  @*     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree"> *@
+  @*       Accordion Item #3 *@
+  @*     </button> *@
+  @*   </h2> *@
+  @*   <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample"> *@
+  @*     <div class="accordion-body"> *@
+  @*       <strong>This is the third item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow. *@
+  @*     </div> *@
+  @*   </div> *@
+  @* </div> *@
+</div>
