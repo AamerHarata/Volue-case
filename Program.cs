@@ -1,7 +1,13 @@
+using Volue_case.AppConfigurations;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+
+ConfigureDb.Configure(builder.Services, builder.Configuration.GetConnectionString("Postgres"));
+
+builder.Services.AddHttpClient();
+builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
 var app = builder.Build();
 

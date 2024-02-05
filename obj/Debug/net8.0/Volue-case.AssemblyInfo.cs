@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Volue-case")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+05fb896f9fe5e77086a0212da60f6564ace1860c")]
 [assembly: System.Reflection.AssemblyProductAttribute("Volue-case")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Volue-case")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
