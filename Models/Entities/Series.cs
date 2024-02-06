@@ -19,7 +19,7 @@ public class Series
     public List<Position> Positions { get; set; }
     
     public Bid Bid { get; set; }
-    public string BidId { get; set; }
+    public string BidExternalId { get; set; }
     
     public Customer Customer { get; set; }
     public string CustomerId { get; set; }

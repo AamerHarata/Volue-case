@@ -10,9 +10,11 @@ ConfigureDb.Configure(builder.Services, builder.Configuration.GetConnectionStrin
 builder.Services.AddHttpClient();
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+ConfigureServices.Configure(builder.Services);
 
 var app = builder.Build();
 
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 await DbInitializer.InitializeDatabase(app.Services);
 
 // Configure the HTTP request pipeline.

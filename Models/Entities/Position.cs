@@ -6,5 +6,5 @@ public class Position
     public decimal Quantity { get; set; }
     
     public Series Series { get; set; }
-    public string SeriesId { get; set; }
+    public string SeriesExternalId { get; set; }
 }

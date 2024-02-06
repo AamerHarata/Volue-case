@@ -1,0 +1,27 @@
+﻿@using Volue_case.Services
+@using Volue_case.Services.CommonHelpers
+@model Bid
+
+<div class="card p-5 w-75 m-auto">
+
+    <table class="table table-striped m-auto">
+        <tr>
+            <th>Customer</th> <td>@Model.Series.Select(x => x.CustomerId).FirstOrDefault()</td>
+        </tr>
+        <tr>
+            <th>Day</th><td>@Model.Day.ToDateFormat()</td>
+        </tr>
+        <tr>
+            <th>Country / Market</th><td>@Model.Country / @Model.Market</td>
+        </tr>
+        <tr>
+            <th>Status</th><td>@Model.Status</td>
+        </tr>
+        <tr>
+            <th>Last change</th><td>@Model.Country / @Model.Market <a>(Check change history)</a></td>
+        </tr>
+
+
+
+    </table>
+</div>

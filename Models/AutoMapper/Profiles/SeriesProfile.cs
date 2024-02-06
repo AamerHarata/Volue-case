@@ -1,14 +1,15 @@
 ﻿using AutoMapper;
+using Volue_case.Models.Entities;
 using Volue_case.Models.ViewModels;
 
 namespace Volue_case.Models.AutoMapper.Profiles;
 
-public class BidProfile : Profile
+public class SeriesProfile : Profile
 {
-    public BidProfile()
+    public SeriesProfile()
     {
-        CreateProjection<Bid, BidVm>()
-            .ForMember(dest => dest.Id,
+        CreateProjection<Series, SeriesVm>()
+            .ForMember(dest => dest.Id, 
                 opt => opt.MapFrom(src => src.ExternalId));
             ;
     }

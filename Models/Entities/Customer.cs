@@ -1,6 +1,6 @@
 ﻿namespace Volue_case.Models.Entities;
 
-public class Customer
+public class Customer(string id)
 {
-    public string Id { get; set; }
+    public string Id { get; set; } = id;
 }

@@ -12,9 +12,9 @@ public class Bid
     public string Market { get; set; }
     public BidStatus Status { get; set; }
     public string Country { get; set; }
-    
-    public List<Series> Series { get; set; }
-    public List<UpdateHistory> UpdateHistory { get; set; }
+
+    public List<Series> Series { get; set; } = new();
+    public List<UpdateHistory> UpdateHistory { get; set; } = new();
 }
 
 public enum BidStatus
