@@ -1,29 +1,70 @@
-﻿@using Volue_case.Services
-@model Bid?
+﻿@using Volue_case.Models.ViewModels
+@model IEnumerable<Volue_case.Models.ViewModels.BidBasicVm>
 @{
     ViewData["Title"] = "Home Page";
-  var i = 1;
+    var dto = new BidDefaultQueryDto("TestCustomer", new DateTime(2024, 2, 3), "FCR-D-D1", "Sweden");
 }
 
-<form class="mb-2 m-auto text-center d-flex justify-content-center">
-  <input class="form-control-sm mx-1" placeholder="Customer Id" type="text"/>
-  <input class="form-control-sm mx-1" placeholder="Date" type="date"/>
-  <input class="form-control-sm mx-1" placeholder="Market" type="text"/>
-  <input class="form-control-sm mx-1" placeholder="Country" type="text"/>
-  <button class="btn btn-sm btn-success mx-1">Go</button>
+<h3 class="text-center mb-3">Check new result</h3>
+<form class="mb-2 m-auto text-center d-flex justify-content-center" asp-action="Index" method="post">
+    <input name="customerId" asp-for="@dto.CustomerId" class="form-control-sm mx-1" placeholder="Customer Id" type="text"/>
+    <input name="day" value="2024-02-03" class="form-control-sm mx-1" placeholder="Date" type="date"/>
+    <input name="market" asp-for="@dto.Market" class="form-control-sm mx-1" placeholder="Market" type="text"/>
+    <input name="country" asp-for="@dto.Country" class="form-control-sm mx-1" placeholder="Country" type="text"/>
+    <button class="btn btn-sm btn-success mx-1" type="submit">Go</button>
 </form>
-<p class="pb-3"></p>
-
-@if (Model != null)
+@if (ViewBag.Message != null)
 {
-  <partial name="_BidCard" model="@Model"/>
-  <p class="pb-3"></p>
-  <partial name="_Series" model="@Model.Series.OrderByDescending(x => x.StartInterval)"/>
+    <div class="text-center text-success fw-bolder">@ViewBag.Message</div>
+}
+
+<hr/>
+
+@if (Model.Any())
+{
+    foreach (var bid in Model)
+    {
+        <partial class="text-start" name="_BidCard" model="@bid"/>
+        <div class="text-center mt-1 mb-4">
+            <a asp-controller="Home" asp-action="BidResult" asp-route-id="@bid.Id"><button class="btn btn-success m-auto">Open result</button></a>
+            <button id="status-@bid.Id" data-bid-id="@bid.Id" class="btn btn-secondary m-auto status">Check sync status</button>
+            <button id="sync-@bid.Id" data-bid-id="@bid.Id" class="btn btn-danger m-auto sync">Sync</button>
+        </div>
+    }
 }
 else
 {
-  <div class="text-center">
-    <div>No result in our database for this query!</div>
-    <div>please try another query values .. or go to <strong>Sync listener</strong> and fetch data.</div>
-  </div>
+    <h6 class="text-center my-5 text-muted">No data in our database, please use "Check new result" form, to fetch data!</h6>
+}
+
+
+@section Scripts
+{
+    <script>
+    $(document).ready(function (){
+       $(".status").unbind().bind('click', function (){
+           const resultId = $(this).attr('data-bid-id');
+           $.ajax({
+           method: 'get',
+           url: '/Home/CheckStatus/'+resultId,
+           
+           success: function (response){ alert(response); console.log(response)},
+           error: function (response){ alert(response.responseText)},    
+           })
+           
+       });
+       
+       $(".sync").unbind().bind('click', function (){
+           const resultId = $(this).attr('data-bid-id');
+           $.ajax({
+           method: 'patch',
+           url: '/Home/SyncBidResult/'+resultId,
+           success: function (response){ alert(response); console.log(response)},
+           error: function (response){ alert(response.responseText)},
+           })
+       }); 
+       
+    });   
+    
+    </script>
 }

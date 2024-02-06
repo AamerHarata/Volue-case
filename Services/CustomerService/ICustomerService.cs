@@ -2,5 +2,6 @@
 
 public interface ICustomerService
 {
-    Task AddNewIfNotExist(string customerId);
+    Task AddNewIfNotExistAsync(string customerId);
+    Task DeleteAllAsync();
 }

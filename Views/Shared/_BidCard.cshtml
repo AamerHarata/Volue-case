@@ -1,0 +1,28 @@
+﻿@model Volue_case.Models.ViewModels.BidBasicVm
+
+<div class="card p-5 w-75 m-auto">
+
+    <table class="table table-striped m-auto">
+        <tr>
+            <th>Customer</th> <td>@Model.Customer.Id</td>
+        </tr>
+        <tr>
+            <th>Day</th><td>@Model.Day</td>
+        </tr>
+        <tr>
+            <th>Country / Market</th><td>@Model.Country / @Model.Market</td>
+        </tr>
+        <tr>
+            <th>Status</th><td>@Model.Status</td>
+        </tr>
+        <tr>
+            <th>Value</th><td>@Model.TotalValue (USD)</td>
+        </tr>
+        <tr>
+            <th>Last change</th><td>@Model.DateOfLastChange <a asp-controller="Home" asp-action="History" asp-route-bidId="@Model.Id">(Check change history)</a></td>
+        </tr>
+
+
+
+    </table>
+</div>

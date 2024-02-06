@@ -1,0 +1,20 @@
+﻿@model Volue_case.Models.ViewModels.BidDetailedVm?
+
+@{
+    ViewBag.Title = "Bid result";
+    Layout = "_Layout";
+}
+
+@if (Model != null)
+{
+  <partial name="_BidCard" model="@Model"/>
+  <p class="pb-3"></p>
+  <partial name="_Series" model="@Model.Series.OrderByDescending(x => x.StartInterval).ToList()"/>
+}
+else
+{
+  <div class="text-center">
+    <div>Bid not found in our database!</div>
+  </div>
+}
+

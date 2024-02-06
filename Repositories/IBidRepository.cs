@@ -6,6 +6,8 @@ namespace Volue_case.Repositories;
 public interface IBidRepository : IRepository<Bid>
 {
     IQueryable<Bid> GetById(string bidId);
+
+    IQueryable<UpdateHistory> GetHistoryByBidId(string bidId);
     IQueryable<Bid> GetByDefaultQuery(BidDefaultQueryDto dto);
     IQueryable<Bid> GetAll();
 

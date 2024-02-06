@@ -23,4 +23,6 @@ public class Repository<T>(ApplicationDbContext context) : IRepository<T>
             _dbSet.Attach(entity);
         _dbSet.Remove(entity);
     }
+
+    public void DeleteAll(IEnumerable<T> entities) => context.RemoveRange(entities);
 }

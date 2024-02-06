@@ -18,6 +18,22 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes = true
 build_property.MSBuildProjectDirectory = D:\GitFolders\Programming\C#\Testing\Volue-case
 build_property._RazorSourceGeneratorDebug = 
 
+[D:/GitFolders/Programming/C\#/Testing/Volue-case/Views/DataManager/DeleteAll.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGF0YU1hbmFnZXJcRGVsZXRlQWxsLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GitFolders/Programming/C\#/Testing/Volue-case/Views/DataManager/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGF0YU1hbmFnZXJcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GitFolders/Programming/C\#/Testing/Volue-case/Views/Home/BidResult.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxCaWRSZXN1bHQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GitFolders/Programming/C\#/Testing/Volue-case/Views/Home/History.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxIaXN0b3J5LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/GitFolders/Programming/C\#/Testing/Volue-case/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
@@ -26,16 +42,16 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/GitFolders/Programming/C\#/Testing/Volue-case/Views/Home/_BidCard.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxfQmlkQ2FyZC5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
-[D:/GitFolders/Programming/C\#/Testing/Volue-case/Views/Home/_Series.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxfU2VyaWVzLmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
 [D:/GitFolders/Programming/C\#/Testing/Volue-case/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GitFolders/Programming/C\#/Testing/Volue-case/Views/Shared/_BidCard.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9CaWRDYXJkLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GitFolders/Programming/C\#/Testing/Volue-case/Views/Shared/_Series.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9TZXJpZXMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/GitFolders/Programming/C\#/Testing/Volue-case/Views/Shared/_ValidationScriptsPartial.cshtml]

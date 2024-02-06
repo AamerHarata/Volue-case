@@ -7,5 +7,7 @@ namespace Volue_case.Repositories;
 public class CustomerRepository(ApplicationDbContext context) : Repository<Customer>(context), ICustomerRepository
 {
     public IQueryable<Customer> GetById(string customerId) =>
-        context.Customers.AsNoTracking().Where(x => x.Id == customerId);
+        GetAll().Where(x => x.Id == customerId);
+
+    public IQueryable<Customer> GetAll() => context.Customers.AsNoTracking();
 }

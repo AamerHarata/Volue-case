@@ -1,0 +1,35 @@
+﻿@model IEnumerable<Volue_case.Models.ViewModels.HistoryVm>
+
+@{
+    ViewBag.Title = "History";
+    Layout = "_Layout";
+    var i = 1;
+}
+
+@if (!Model.Any())
+{
+    <div class="text-center">No change history found!</div>
+}
+else
+{
+    <table class="table table-striped">
+        <tr>
+            <th>#</th>
+            <th>Date / time</th>
+            <th>From status</th>
+            <th>To status</th>
+        </tr>
+        @foreach (var history in Model)
+        {
+            <tr>
+                <td>@i</td>
+                <td>@history.DateTime</td>
+                <td>@history.FromStatus</td>
+                <td>@history.ToStatus</td>
+            </tr>
+
+            i++;
+        }
+
+    </table>
+}

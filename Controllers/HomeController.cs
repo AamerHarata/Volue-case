@@ -12,76 +12,108 @@ using Volue_case.Services.BidResultService;
 
 namespace Volue_case.Controllers;
 
-public class HomeController(ILogger<HomeController> logger, IHttpClientFactory clientFactory, IMapper mapper,
-        IConfiguration configuration, ApplicationDbContext context, IBidResultService bid) : Controller
+[Route("[controller]")]
+public class HomeController(IBidResultService bid) : Controller
 {
 
+    [HttpGet("/")]
     public async Task<IActionResult> Index()
     {
-        var request = new HttpRequestMessage(HttpMethod.Get,
-            "https://vmsn-app-planner3test.azurewebsites.net/status/market/bid-result?" +
-            "ForDate=2024-02-03&Market=FCR-D-D1&CustomerId=TestCustomer&Country=Sweden");
-        request.Headers.Add("ApiKey", "Api-Planner-996ba74c-cdaf-4f66-9448-ffff");
+        var existingResults = await bid.GetAllBasicVmAsync();
 
-        var client = clientFactory.CreateClient();
+        return View(existingResults);
+    }
 
-        var response = await client.SendAsync(request);
-        var responseContent = await response.Content.ReadAsStringAsync();
-        // var responseContent = await response.Content.ReadFromJsonAsync<Bid>();
+    
+    [HttpPost("/")]
+    public async Task<IActionResult> Index(string customerId, DateTime day, string market, string country)
+    {
+        var existingResults = await bid.GetAllBasicVmAsync();
 
-        var options = new JsonSerializerOptions
+        var dto = new BidDefaultQueryDto(customerId, day, market, country);
+        var result = await bid.FetchDataAsync(dto);
+
+        if (result == null)
         {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-            Converters = { new JsonStringEnumConverter(JsonNamingPolicy.CamelCase) },
-            PropertyNameCaseInsensitive = true,
-            NumberHandling = JsonNumberHandling.AllowReadingFromString
-        };
-        
-
-        var parsedBid = JsonSerializer.Deserialize<Bid>(responseContent, options);
-
-        if (parsedBid == null)
-            return BadRequest("Parsed Bid is null");
-        
-        // Save to db
-        if (!await context.Bids.AnyAsync(x => x.ExternalId == parsedBid.ExternalId))
-        {
-            var customerId = parsedBid.Series.Select(x => x.CustomerId).Distinct().SingleOrDefault();
-            if (customerId != null && !await context.Customers.AnyAsync(x => x.Id == customerId))
-                await context.AddAsync(new Customer(customerId));
-
-
-            foreach (var history in parsedBid.UpdateHistory)
-                history.BidExternalId = parsedBid.ExternalId;
-            foreach (var series in parsedBid.Series){
-                series.BidExternalId = parsedBid.ExternalId;
-                foreach (var pos in series.Positions)
-                    pos.SeriesExternalId = series.ExternalId;
-            }
-
-            await context.AddAsync(parsedBid);
-            await context.SaveChangesAsync();
+            ViewBag.Message = "Result not found in Volue api!";
+            return View(existingResults);
         }
-        
 
-        return View(parsedBid);
+        if (await bid.IsBidExistAsync(result.ExternalId))
+        {
+            ViewBag.Message = "Result found! Already exists in our database!";
+            return View(existingResults);
+        }
+
+        await bid.AddNewIfNotExist(result);
+        existingResults = await bid.GetAllBasicVmAsync();
+        ViewBag.Message = "New result found and added to the database!";
+
+        return View(existingResults);
     }
 
-    public async Task<IActionResult> Privacy()
+    [HttpGet("BidResult/{id}")]
+    public async Task<IActionResult> BidResult(string id)
     {
-        var bidResult = await bid.FetchDataAsync(
-            new BidDefaultQueryDto("TestCustomer", new DateTime(2024, 2, 3), 
-                "FCR-D-D1", "Sweden"));
-        return Ok(bidResult);
+        var result = await bid.GetDetailedVmByIdAsync(id);
+
+        return View(result);
     }
 
-    public async Task<IActionResult> Test()
+    [HttpGet("CheckStatus/{resultId}")]
+    public async Task<IActionResult> CheckStatus(string resultId)
     {
+        var existingResult = await bid.GetDetailedVmByIdAsync(resultId);
+        var customerId = await bid.GetCustomerIdByBid(resultId);
+        if (existingResult == null)
+            return NotFound($"Not found result with id {resultId}");
+        if (string.IsNullOrEmpty(customerId))
+            return NotFound("Customer id error!");
 
-        var res = await context.Bids.ProjectTo<BidVm>(mapper.ConfigurationProvider).FirstOrDefaultAsync();
-        
-        return Ok(res);
+        var result = await bid.FetchDataAsync(new BidDefaultQueryDto(customerId, existingResult.DayAsDate,
+            existingResult.Market, existingResult.Country));
+
+        if (result == null)
+            return Ok("Result was deleted from Volue api!");
+
+
+        var identicalWithExistingResult = bid.CheckTwoBidsIdentical(existingResult, result);
+
+
+        return identicalWithExistingResult
+            ? Ok("Both results in db and Volue api are identical! No sync needed.")
+            : Ok("Result seem to be changed! Click Sync to override result in db.");
     }
 
+    [HttpGet("History/{bidId}")]
+    public async Task<IActionResult> History(string bidId) => View(await bid.GetHistoryAsync(bidId));
+
+    [HttpPatch("SyncBidResult/{id}")]
+    public async Task<IActionResult> SyncBidResult(string id)
+    {
+        var existingResult = await bid.GetDetailedVmByIdAsync(id);
+        var customerId = await bid.GetCustomerIdByBid(id);
+        if (existingResult == null)
+            return NotFound($"Not found result with id {id}");
+        if (string.IsNullOrEmpty(customerId))
+            return NotFound("Customer id error!");
+
+        var result = await bid.FetchDataAsync(new BidDefaultQueryDto(customerId, existingResult.DayAsDate,
+            existingResult.Market, existingResult.Country));
+
+        if (result == null)
+            return Ok("Result was deleted from Volue api!");
+        
+        var identicalWithExistingResult = bid.CheckTwoBidsIdentical(existingResult, result);
+
+        if (identicalWithExistingResult)
+            return Ok("Both results in db and Volue api are identical! No sync needed.");
+
+        await bid.DeleteById(id);
+        await bid.AddNewIfNotExist(result);
+
+        return Ok("Sync completed!");
+    }
+    
 
 }

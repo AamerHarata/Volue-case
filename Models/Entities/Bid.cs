@@ -20,5 +20,6 @@ public class Bid
 public enum BidStatus
 {
     Undefined,
-    SentToTradingSystem
+    SentToTradingSystem,
+    PendingConfirmation
 }

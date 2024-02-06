@@ -11,6 +11,9 @@ public class BidRepository(ApplicationDbContext context) : Repository<Bid>(conte
     public IQueryable<Bid> GetById(string bidId) =>
         GetAll().Where(x => x.ExternalId == bidId);
 
+    public IQueryable<UpdateHistory> GetHistoryByBidId(string bidId) =>
+        context.History.Where(x => x.BidExternalId == bidId);
+
     public IQueryable<Bid> GetByDefaultQuery(BidDefaultQueryDto dto) =>
         context.Bids.AsNoTracking()
             .Where(x => x.Day.ToDateRequestFormat() == dto.Day 

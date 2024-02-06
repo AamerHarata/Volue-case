@@ -2,5 +2,5 @@
 
 public class PossitionVm
 {
-    
+    public decimal Quantity {get;private set;}
 }

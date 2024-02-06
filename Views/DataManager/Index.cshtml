@@ -1,0 +1,17 @@
+﻿@{
+    ViewBag.Title = "Data manager";
+    Layout = "_Layout";
+}
+
+<div class="text-center">
+    @if (!string.IsNullOrEmpty(ViewBag.Message))
+    {
+        <div class="mb-3">Database is empty, please go to homepage and check new results!</div>
+        <a asp-controller="Home" asp-action="Index"><button class="btn btn-success">Homepage</button></a>
+    }
+    else
+    {
+        <div class="mb-3">This will empty all data in the database!</div>
+        <a asp-action="DeleteAllData"><button class="btn btn-danger">Delete all data</button></a>
+    }
+</div>
