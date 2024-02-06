@@ -1,4 +1,5 @@
 using Volue_case.AppConfigurations;
+using Volue_case.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,10 +9,11 @@ ConfigureDb.Configure(builder.Services, builder.Configuration.GetConnectionStrin
 
 builder.Services.AddHttpClient();
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
-
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 var app = builder.Build();
+
+await DbInitializer.InitializeDatabase(app.Services);
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
