@@ -114,7 +114,7 @@ public class BidResultService(IUnitOfWork unitOfWork, ICustomerService customer,
             new UpdateHistory
             {
                 FromStatus = bid.UpdateHistory.LastOrDefault()?.ToStatus?? BidStatus.Undefined, 
-                ToStatus = BidStatus.PulledByAamer, UpdateTime = DateTime.Now
+                ToStatus = BidStatus.PulledByAamer, UpdateTime = DateTime.Now.AddHours(1) // Assuming the local time is (+1 UTC / server time-zone)
             });
 
         foreach (var history in bid.UpdateHistory)
