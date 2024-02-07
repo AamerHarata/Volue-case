@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Volue_case.Models.ViewModels;
 using Volue_case.Services.BidResultService;
+using Volue_case.Services.CommonHelpers;
 
 namespace Volue_case.Controllers;
 
@@ -15,6 +16,10 @@ public class HomeController(IBidResultService bid) : Controller
     [HttpPost("/")]
     public async Task<IActionResult> Index(string customerId, DateTime day, string market, string country)
     {
+        ViewBag.CustomerId = customerId;
+        ViewBag.Market = market;
+        ViewBag.Country = country;
+        ViewBag.Day = day.ToDateRequestFormat();
         
         // Get existing results in database
         var existingResults = await bid.GetAllBasicVmAsync();

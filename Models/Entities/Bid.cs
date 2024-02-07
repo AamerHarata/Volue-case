@@ -1,11 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Volue_case.Models.Entities;
-
-namespace Volue_case.Models;
+﻿namespace Volue_case.Models.Entities;
 
 public class Bid
 {
-    [Key]
     public string ExternalId { get; set; }
     public DateTime Day { get; set; }
     public DateTime DateOfLastChange { get; set; }
@@ -21,5 +17,6 @@ public enum BidStatus
 {
     Undefined,
     SentToTradingSystem,
-    PendingConfirmation
+    PendingConfirmation,
+    PulledByAamer
 }

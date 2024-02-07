@@ -5,6 +5,7 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using Volue_case.Models;
+using Volue_case.Models.Entities;
 using Volue_case.Models.ViewModels;
 using Volue_case.Repositories;
 using Volue_case.Services.CustomerService;
@@ -39,6 +40,16 @@ public class BidResultService(IUnitOfWork unitOfWork, ICustomerService customer,
         {
             // Parse response
             var responseContent = await response.Content.ReadAsStringAsync();
+            
+            // Handle the case when server response with 200, but the result was empty anyway.
+            responseContent = responseContent.Replace("\"dateOfLastChange\":null",
+                "\"dateOfLastChange\":\"0001-01-01T00:00:00\"");
+            if (responseContent.Contains("\"externalId\":\"\""))
+                return null;
+
+
+            
+            
 
             // Create json parsing options
             // ToDo :: An error shown up in some cases when parsing some DateTimes
@@ -47,7 +58,8 @@ public class BidResultService(IUnitOfWork unitOfWork, ICustomerService customer,
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
                 Converters = { new JsonStringEnumConverter(JsonNamingPolicy.CamelCase) },
                 PropertyNameCaseInsensitive = true,
-                NumberHandling = JsonNumberHandling.AllowReadingFromString
+                NumberHandling = JsonNumberHandling.AllowReadingFromString,
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
             };
 
             // Deserialize json into Bid model.
@@ -96,8 +108,14 @@ public class BidResultService(IUnitOfWork unitOfWork, ICustomerService customer,
 
         // Create customer (assuming a bid with all its series has the exact same customer).
         await customer.AddNewIfNotExistAsync(customerId);
-
-
+        
+        // Add new history record
+        bid.UpdateHistory.Add(
+            new UpdateHistory
+            {
+                FromStatus = bid.UpdateHistory.LastOrDefault()?.ToStatus?? BidStatus.Undefined, 
+                ToStatus = BidStatus.PulledByAamer, UpdateTime = DateTime.Now
+            });
 
         foreach (var history in bid.UpdateHistory)
             history.BidExternalId = bid.ExternalId; // Set history BidId foreign key.
@@ -161,7 +179,7 @@ public class BidResultService(IUnitOfWork unitOfWork, ICustomerService customer,
         var seriesNumber = bid1.Series.Count == bid2.Series.Count;
         var positionsCount =
             bid1.Series.Select(x => x.Positions).Count() == bid2.Series.Select(x => x.Positions).Count();
-        var history = bid1.UpdateHistory.Count == bid2.UpdateHistory.Count;
+        var history = bid1.UpdateHistory.Count == bid2.UpdateHistory.Count + 1; // +1 added because we add a new history record on adding (manipulate data)
 
         return propIdentical && seriesNumber && positionsCount && history;
     }

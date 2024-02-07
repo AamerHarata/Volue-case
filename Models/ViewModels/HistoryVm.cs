@@ -1,4 +1,6 @@
-﻿namespace Volue_case.Models.ViewModels;
+﻿using Volue_case.Models.Entities;
+
+namespace Volue_case.Models.ViewModels;
 
 public class HistoryVm
 {

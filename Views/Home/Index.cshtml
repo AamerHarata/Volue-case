@@ -2,15 +2,19 @@
 @model IEnumerable<Volue_case.Models.ViewModels.BidBasicVm>
 @{
     ViewData["Title"] = "Home Page";
-    var dto = new BidDefaultQueryDto("TestCustomer", new DateTime(2024, 2, 3), "FCR-D-D1", "Sweden");
+    // var dto = new BidDefaultQueryDto("TestCustomer", new DateTime(2024, 2, 3), "FCR-D-D1", "Sweden");
+    ViewBag.CustomerId ??= "TestCustomer"; 
+    ViewBag.Market ??= "FCR-D-D1"; 
+    ViewBag.Country ??= "Sweden"; 
+    ViewBag.Day ??= "2024-02-03"; 
 }
 
 <h3 class="text-center mb-3">Check new result</h3>
 <form class="mb-2 m-auto text-center d-flex justify-content-center" asp-action="Index" method="post">
-    <input name="customerId" asp-for="@dto.CustomerId" class="form-control-sm mx-1" placeholder="Customer Id" type="text"/>
-    <input name="day" value="2024-02-03" class="form-control-sm mx-1" placeholder="Date" type="date"/>
-    <input name="market" asp-for="@dto.Market" class="form-control-sm mx-1" placeholder="Market" type="text"/>
-    <input name="country" asp-for="@dto.Country" class="form-control-sm mx-1" placeholder="Country" type="text"/>
+    <input name="customerId" value="@ViewBag.CustomerId" class="form-control-sm mx-1" placeholder="Customer Id" type="text"/>
+    <input name="day" value="@ViewBag.Day" class="form-control-sm mx-1" placeholder="Date" type="date"/>
+    <input name="market" value="@ViewBag.Market" class="form-control-sm mx-1" placeholder="Market" type="text"/>
+    <input name="country" value="@ViewBag.Country" class="form-control-sm mx-1" placeholder="Country" type="text"/>
     <button class="btn btn-sm btn-success mx-1" type="submit">Go</button>
 </form>
 @if (ViewBag.Message != null)
@@ -42,6 +46,9 @@ else
 {
     <script>
     $(document).ready(function (){
+         if (window.history.replaceState)
+             window.history.replaceState( null, null, window.location.href );
+        
        $(".status").unbind().bind('click', function (){
            const resultId = $(this).attr('data-bid-id');
            $.ajax({
@@ -59,7 +66,7 @@ else
            $.ajax({
            method: 'patch',
            url: '/Home/SyncBidResult/'+resultId,
-           success: function (response){ alert(response); console.log(response)},
+           success: function (response){ alert(response); window.location.reload()},
            error: function (response){ alert(response.responseText)},
            })
        }); 

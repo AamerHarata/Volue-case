@@ -8,30 +8,33 @@ public static class DbContextConfigurations
 {
     public static void ConfigureKeys(ModelBuilder builder)
     {
+        builder.Entity<Bid>()
+            .HasKey(x => x.ExternalId);
+        builder.Entity<Series>()
+            .HasKey(x => x.ExternalId);
+        builder.Entity<Position>()
+            .HasKey(x => x.Id);
         builder.Entity<UpdateHistory>()
             .HasKey(x => new { BidId = x.BidExternalId, x.UpdateTime });
     }
     public static void ConfigureRelations(ModelBuilder builder)
     {
         builder.Entity<Bid>()
-            .HasMany<Series>()
+            .HasMany(x=>x.Series)
             .WithOne(x => x.Bid)
             .HasForeignKey(x => x.BidExternalId)
-            .HasPrincipalKey(x => x.ExternalId)
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.Entity<Bid>()
-            .HasMany<UpdateHistory>()
+            .HasMany(x=> x.UpdateHistory)
             .WithOne(x => x.Bid)
             .HasForeignKey(x=> x.BidExternalId)
-            .HasPrincipalKey(x=> x.ExternalId)
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.Entity<Series>()
-            .HasMany<Position>()
+            .HasMany(x=> x.Positions)
             .WithOne(x => x.Series)
             .HasForeignKey(x => x.SeriesExternalId)
-            .HasPrincipalKey(x => x.ExternalId)
             .OnDelete(DeleteBehavior.Cascade)
             ;
     }

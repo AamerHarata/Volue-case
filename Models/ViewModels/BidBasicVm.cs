@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using Volue_case.Models.Entities;
 
 namespace Volue_case.Models.ViewModels;
 

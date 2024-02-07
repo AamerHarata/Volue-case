@@ -4,7 +4,6 @@ namespace Volue_case.Models.Entities;
 
 public class Series
 {
-    [Key]
     public string ExternalId { get; set; }
     
     public BidStatus Status { get; set; }

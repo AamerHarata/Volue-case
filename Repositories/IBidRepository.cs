@@ -1,4 +1,5 @@
 ﻿using Volue_case.Models;
+using Volue_case.Models.Entities;
 using Volue_case.Models.ViewModels;
 
 namespace Volue_case.Repositories;

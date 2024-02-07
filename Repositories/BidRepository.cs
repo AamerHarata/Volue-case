@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Volue_case.Data;
 using Volue_case.Models;
+using Volue_case.Models.Entities;
 using Volue_case.Models.ViewModels;
 using Volue_case.Services.CommonHelpers;
 

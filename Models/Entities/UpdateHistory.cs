@@ -1,4 +1,4 @@
-﻿namespace Volue_case.Models;
+﻿namespace Volue_case.Models.Entities;
 
 public class UpdateHistory
 {
