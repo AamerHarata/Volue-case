@@ -10,7 +10,8 @@ public class SeriesProfile : Profile
     {
         CreateProjection<Series, SeriesVm>()
             .ForMember(dest => dest.Id, 
-                opt => opt.MapFrom(src => src.ExternalId));
+                opt =>
+                    opt.MapFrom(src => src.ExternalId));
             ;
     }
 }
