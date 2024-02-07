@@ -11,7 +11,6 @@ services:
       - nginx-html:/usr/share/nginx/html
       - nginx-acme:/etc/acme.sh
       - /var/run/docker.sock:/tmp/docker.sock:ro
-      - "./custom_proxy_settings.conf:/etc/nginx/conf.d/my_custom_proxy_settings.conf"
     labels:
       - "com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy=true"
 
