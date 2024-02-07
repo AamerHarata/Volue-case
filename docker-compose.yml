@@ -1,5 +1,32 @@
 version: '3'
 services:
+  nginx-proxy:
+    image: "jwilder/nginx-proxy"
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - nginx-certs:/etc/nginx/certs
+      - nginx-vhost:/etc/nginx/vhost.d
+      - nginx-html:/usr/share/nginx/html
+      - nginx-acme:/etc/acme.sh
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - "./custom_proxy_settings.conf:/etc/nginx/conf.d/my_custom_proxy_settings.conf"
+    labels:
+      - "com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy=true"
+
+  letsencrypt-nginx-proxy-companion:
+    image: "jrcs/letsencrypt-nginx-proxy-companion"
+    depends_on:
+      - nginx-proxy
+    volumes:
+      - nginx-certs:/etc/nginx/certs
+      - nginx-vhost:/etc/nginx/vhost.d
+      - nginx-html:/usr/share/nginx/html
+      - nginx-acme:/etc/acme.sh
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+
   db:
     image: "postgres"
     ports:
@@ -10,6 +37,22 @@ services:
     volumes:
       - db-data:/var/lib/postgresql/data
   
+  application:
+    build: .
+    depends_on:
+      - db
+    ports:
+      - 8080:80
+    restart: unless-stopped
+    environment:
+      VIRTUAL_HOST: "${HOST}"
+      LETSENCRYPT_HOST: "${HOST}"
+      LETSENCRYPT_EMAIL: "${EMAIL}"
+  
 
 volumes:
+  nginx-certs:
+  nginx-vhost:
+  nginx-html:
+  nginx-acme:
   db-data:

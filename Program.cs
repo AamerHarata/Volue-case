@@ -2,6 +2,7 @@ using Volue_case.AppConfigurations;
 using Volue_case.Data;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.WebHost.UseUrls(builder.Environment.IsDevelopment() ? "" : "http://*:80");
 
 // Add services to the container.
 
